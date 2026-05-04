@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Online Parking Management System - Registration</title>
+</head>
+<body>
+  <header>
+    <h1>Online Parking Management System</h1>
+    <h2>New User Registration</h2>
+  </header>
+
+  <main>
+    <p>Please fill in the details below. Client-side validation follows the provided algorithm.</p>
+
+    <form id="regForm" novalidate>
+      <div>
+        <label for="fname">First Name</label><br>
+        <input id="fname" name="firstname" type="text" placeholder="Enter first name" required>
+        <div id="fnameError" aria-live="polite" style="color:red"></div>
+      </div>
+      <br>
+
+      <div>
+        <label for="lname">Last Name</label><br>
+        <input id="lname" name="lastname" type="text" placeholder="Enter last name" required>
+        <div id="lnameError" aria-live="polite" style="color:red"></div>
+      </div>
+      <br>
+
+      <div>
+        <label for="pwd">Password</label><br>
+        <input id="pwd" name="password" type="password" placeholder="Enter password" required>
+        <div id="pwdError" aria-live="polite" style="color:red"></div>
+      </div>
+      <br>
+
+      <div>
+        <label for="email">E-mail</label><br>
+        <input id="email" name="email" type="email" placeholder="name@domain.com" required>
+        <div id="emailError" aria-live="polite" style="color:red"></div>
+      </div>
+      <br>
+
+      <div>
+        <label for="mobile">Mobile Number</label><br>
+        <input id="mobile" name="mobile" type="tel" inputmode="numeric" placeholder="10 digit mobile number" required>
+        <div id="mobileError" aria-live="polite" style="color:red"></div>
+      </div>
+      <br>
+
+      <div>
+        <label for="address">Address</label><br>
+        <textarea id="address" name="address" rows="4" cols="40" placeholder="Enter address" required></textarea>
+        <div id="addressError" aria-live="polite" style="color:red"></div>
+      </div>
+      <br>
+
+      <div>
+        <button type="submit">Register Account</button>
+        <button type="reset">Clear Form</button>
+      </div>
+
+      <div id="result" aria-live="polite" style="color:green;margin-top:10px;display:none"></div>
+    </form>
+  </main>
+
+  <footer>
+    <small>&copy; Designed by Roshan</small>
+  </footer>
+
+  <script>
+    // Elements
+    const form = document.getElementById('regForm');
+    const fname = document.getElementById('fname');
+    const lname = document.getElementById('lname');
+    const pwd = document.getElementById('pwd');
+    const email = document.getElementById('email');
+    const mobile = document.getElementById('mobile');
+    const address = document.getElementById('address');
+
+    const fnameError = document.getElementById('fnameError');
+    const lnameError = document.getElementById('lnameError');
+    const pwdError = document.getElementById('pwdError');
+    const emailError = document.getElementById('emailError');
+    const mobileError = document.getElementById('mobileError');
+    const addressError = document.getElementById('addressError');
+    const result = document.getElementById('result');
+
+    // Regex patterns per algorithm
+    const nameAlphaRegex = /^[A-Za-z]+$/; // only alphabets, no spaces
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    const mobileRegex = /^\d{10}$/;
+
+    function clearErrors() {
+      fnameError.textContent = '';
+      lnameError.textContent = '';
+      pwdError.textContent = '';
+      emailError.textContent = '';
+      mobileError.textContent = '';
+      addressError.textContent = '';
+      result.style.display = 'none';
+      result.textContent = '';
+    }
+
+    function validateFirstName() {
+      const v = fname.value.trim();
+      if (v.length === 0) {
+        fnameError.textContent = 'First Name is required.';
+        return false;
+      }
+      if (!nameAlphaRegex.test(v)) {
+        fnameError.textContent = 'First Name must contain only alphabets.';
+        return false;
+      }
+      if (v.length < 6) {
+        fnameError.textContent = 'First Name must be at least 6 characters long.';
+        return false;
+      }
+      return true;
+    }
+
+    function validatePassword() {
+      const v = pwd.value;
+      if (v.length < 6) {
+        pwdError.textContent = 'Password must be at least 6 characters long.';
+        return false;
+      }
+      return true;
+    }
+
+    function validateEmail() {
+      const v = email.value.trim();
+      if (v.length === 0) {
+        emailError.textContent = 'E-mail is required.';
+        return false;
+      }
+      if (!emailRegex.test(v)) {
+        emailError.textContent = 'Invalid email format. Use name@domain.com.';
+        return false;
+      }
+      return true;
+    }
+
+    function validateMobile() {
+      const v = mobile.value.trim();
+      if (!mobileRegex.test(v)) {
+        mobileError.textContent = 'Mobile number must contain exactly 10 digits and no letters or special characters.';
+        return false;
+      }
+      return true;
+    }
+
+    function validateLastName() {
+      const v = lname.value.trim();
+      if (v.length === 0) {
+        lnameError.textContent = 'Last Name cannot be empty.';
+        return false;
+      }
+      return true;
+    }
+
+    function validateAddress() {
+      const v = address.value.trim();
+      if (v.length === 0) {
+        addressError.textContent = 'Address cannot be empty.';
+        return false;
+      }
+      return true;
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault(); // prevent actual submission for demo
+      clearErrors();
+
+      // Validate in order; focus first invalid field
+      if (!validateFirstName()) { fname.focus(); return; }
+      if (!validatePassword()) { pwd.focus(); return; }
+      if (!validateEmail()) { email.focus(); return; }
+      if (!validateMobile()) { mobile.focus(); return; }
+      if (!validateLastName()) { lname.focus(); return; }
+      if (!validateAddress()) { address.focus(); return; }
+
+      // All validations passed
+      result.style.display = 'block';
+      result.textContent = 'Registration successful. Form data is valid.';
+      // In production, submit to server here (e.g., form.submit() or fetch)
+    });
+
+    // Clear individual error when user types
+    [fname, lname, pwd, email, mobile, address].forEach(el => {
+      el.addEventListener('input', () => {
+        const err = document.getElementById(el.id + 'Error');
+        if (err) err.textContent = '';
+      });
+    });
+
+    // Reset handler clears messages
+    form.addEventListener('reset', () => {
+      setTimeout(clearErrors, 0);
+    });
+  </script>
+</body>
+</html>
